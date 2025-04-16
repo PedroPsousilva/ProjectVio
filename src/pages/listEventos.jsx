@@ -15,8 +15,8 @@ import { Button, IconButton, Alert, Snackbar } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link, useNavigate } from "react-router-dom";
 
-function listUsers() {
-  const [users, setUsers] = useState([]);
+function listEventos() {
+  const [eventos, setEventos] = useState([]);
   const [alert, setAlert] = useState({
     // visibilidade (false: oculto; true: visível)
      open: false, 
@@ -39,12 +39,12 @@ function listUsers() {
    };
   const navigate = useNavigate();
 
-  async function getUsers() {
+  async function getEventos() {
     // Chamada da Api
-    await api.getUsers().then(
+    await api.getEventos().then(
       (response) => {
-        console.log(response.data.users);
-        setUsers(response.data.users);
+        console.log(response.data.eventos);
+        setEventos(response.data.eventos);
       },
       (error) => {
         console.log("Erro ", error);
@@ -52,28 +52,29 @@ function listUsers() {
     );
   }
 
-  async function deleteUser(id) {
+  async function deleteEvento(id) {
     // Chamada da Api
     try {
-      await api.deleteUser(id);
-      await getUsers();
+      await api.deleteEvento(id);
+      await getEventos();
       // mensagem informativa
-      showAlert("success", "Usuário deletado com sucesso!")
+      showAlert("success", "Evento deletado com sucesso!")
     } catch (error) {
-      showAlert("error", "Erro ao deletar usuário!")
+      showAlert("error", "Erro ao deletar evento!")
 
       // mensagem informativa de erro
     }
   }
 
-  const listUsers = users.map((user) => {
+  const listEventos = eventos.map((evento) => {
     return (
-      <TableRow key={user.id_usuario}>
-        <TableCell align="center">{user.name}</TableCell>
-        <TableCell align="center">{user.email}</TableCell>
-        <TableCell align="center">{user.cpf}</TableCell>
+      <TableRow key={evento.id_evento}>
+        <TableCell align="center">{evento.nome}</TableCell>
+        <TableCell align="center">{evento.descricao}</TableCell>
+        <TableCell align="center">{evento.data_hora}</TableCell>
+        <TableCell align="center">{evento.local}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={() => deleteUser(user.id_usuario)}>
+          <IconButton onClick={() => deleteEvento(evento.id_evento)}>
             <DeleteIcon color="error" />
           </IconButton>
         </TableCell>
@@ -90,7 +91,7 @@ function listUsers() {
     // if(!localStorage.getItem("authenticated")){
     //   navigate("/");
     // }
-    getUsers();
+    getEventos();
   }, []);
   
   return (
@@ -107,11 +108,11 @@ function listUsers() {
 
       </Snackbar>
 
-      {users.length === 0 ? (
-        <p>Carregando usuários</p>
+      {eventos.length === 0 ? (
+        <p>Carregando eventos</p>
       ) : (
         <div>
-          <h5>Lista de usuários</h5>
+          <h5>Lista de Eventos</h5>
           <TableContainer component={Paper} style={{ margin: "2px" }}>
             <Table size="small">
               <TableHead
@@ -119,12 +120,13 @@ function listUsers() {
               >
                 <TableRow>
                   <TableCell align="center">Nome</TableCell>
-                  <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">CPF</TableCell>
+                  <TableCell align="center">descricao</TableCell>
+                  <TableCell align="center">data_hora</TableCell>
+                  <TableCell align="center">local</TableCell>
                   <TableCell align="center">Ações</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>{listUsers}</TableBody>
+              <TableBody>{listEventos}</TableBody>
             </Table>
           </TableContainer>
           <Button fullWidth variant="contained" onClick={logout}>
@@ -135,4 +137,4 @@ function listUsers() {
     </div>
   );
 }
-export default listUsers;
+export default listEventos;
