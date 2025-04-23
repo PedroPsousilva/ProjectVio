@@ -130,6 +130,18 @@ function listUsers() {
           <Button fullWidth variant="contained" onClick={logout}>
             SAIR
           </Button>
+          
+          <Button type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: "blue",
+            }}>
+           <Link to="/evento">IR PARA LISTA DE EVENTOS</Link>
+          </Button>
+          
         </div>
       )}
     </div>

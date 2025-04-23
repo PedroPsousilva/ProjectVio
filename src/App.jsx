@@ -16,7 +16,7 @@ function App() {
               <ListUsers/>  
             </ProtectedRoute>
           } />
-          <Route path="/eventos" element={
+          <Route path="/evento" element={
             <ProtectedRoute>
               <ListEventos/>  
             </ProtectedRoute>

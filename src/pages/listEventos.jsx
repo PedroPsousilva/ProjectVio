@@ -52,10 +52,10 @@ function listEventos() {
     );
   }
 
-  async function deleteEvento(id) {
+  async function deleteEvento(id_evento) {
     // Chamada da Api
     try {
-      await api.deleteEvento(id);
+      await api.deleteEvento(id_evento);
       await getEventos();
       // mensagem informativa
       showAlert("success", "Evento deletado com sucesso!")
