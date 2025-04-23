@@ -11,9 +11,9 @@ import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import api from "../axios/axios";
 import { Button, IconButton, Alert, Snackbar } from "@mui/material";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link, useNavigate } from "react-router-dom";
+import ConfirmDelete from "../components/ConfirmDelete";
 
 function listUsers() {
   const [users, setUsers] = useState([]);
@@ -27,6 +27,9 @@ function listUsers() {
     message:""
    }); 
 
+   const [userToDelete, setUserToDelete] = useState("");
+   const [modalOpen, setModalOpen] = useState(false);
+
    // função para exibir o alerta
    const showAlert = (severity, message) => {
     setAlert({ open: true, severity, message });
@@ -37,6 +40,11 @@ function listUsers() {
    const handleCloseAlert  = () => {
     setAlert({ ...alert, open: false });
    };
+
+   const openDeleteModal = (id,name) =>{
+    setUserToDelete({ id: id, name: name});
+    setModalOpen(true);
+   }
   const navigate = useNavigate();
 
   async function getUsers() {
@@ -52,15 +60,17 @@ function listUsers() {
     );
   }
 
-  async function deleteUser(id) {
+  async function deleteUser() {
     // Chamada da Api
     try {
-      await api.deleteUser(id);
+      await api.deleteUser(userToDelete.id);
       await getUsers();
       // mensagem informativa
       showAlert("success", "Usuário deletado com sucesso!")
+      setModalOpen(false)
     } catch (error) {
       showAlert("error", "Erro ao deletar usuário!")
+      setModalOpen(false)
 
       // mensagem informativa de erro
     }
@@ -73,7 +83,7 @@ function listUsers() {
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.cpf}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={() => deleteUser(user.id_usuario)}>
+          <IconButton onClick={() => openDeleteModal(user.id_usuario,user.name)}>
             <DeleteIcon color="error" />
           </IconButton>
         </TableCell>
@@ -106,6 +116,13 @@ function listUsers() {
         </Alert>
 
       </Snackbar>
+      <ConfirmDelete
+      open={modalOpen}
+      userName={userToDelete.name}
+      onConfirm={deleteUser}
+      onClose={()=>setModalOpen(false)}
+      
+      />
 
       {users.length === 0 ? (
         <p>Carregando usuários</p>
