@@ -29,9 +29,12 @@ function Login() {
   async function login(){
     await api.postLogin(user).then(
       (response)=>{
-        alert(response.data.message)
-        localStorage.setItem('authenticated',true)
+        alert(response.data.message);
+        if(response.data.token){
+        localStorage.setItem('authenticated',true);
+        localStorage.setItem("token",response.data.token)
         navigate("users/")
+        }
       },
     (error)=>{
       console.log(error)
